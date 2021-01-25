@@ -1,12 +1,18 @@
 from flask import Flask, request
 from flask_restful import Resource, Api
 from flask_jwt import JWT, jwt_required
+from flasgger import Swagger
 
 from security import authenticate, identity
 
 app = Flask(__name__)
 app.secret_key = "PALO"
 api = Api(app)
+app.config['SWAGGER'] = {
+    'title': 'Flasgger RESTful',
+    'uiversion': 2
+}
+swagger = Swagger(app)
 
 jwt = JWT(app, authenticate, identity)
 
@@ -44,6 +50,7 @@ class Item(Resource):
         item = next(filter(lambda x: x['name'] == name, items), None)
         if item is None:
             item = {
+                'id': len(items) + 1,
                 'name': name,
                 'price': request_data['price']
             }
