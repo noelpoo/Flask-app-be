@@ -9,10 +9,6 @@ from security import authenticate, identity
 app = Flask(__name__)
 app.secret_key = "PALO"
 api = Api(app)
-app.config['SWAGGER'] = {
-    'title': 'Flasgger RESTful',
-    'uiversion': 2
-}
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = False
 swagger = Swagger(app)
 
