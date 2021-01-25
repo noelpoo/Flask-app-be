@@ -13,6 +13,7 @@ app.config['SWAGGER'] = {
     'title': 'Flasgger RESTful',
     'uiversion': 2
 }
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = False
 swagger = Swagger(app)
 
 jwt = JWT(app, authenticate, identity)
