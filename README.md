@@ -19,9 +19,10 @@ pip3 install -r requirements.txt
 
 
 
-# API specifications
-## Local host = http://127.0.0.1:5000/ 
-## /auth (login module)
+# API specifications (Live Server)
+## Host = https://flaskapp.osc-fr1.scalingo.io
+## Version = api/v1
+## /auth (login module) (https://flaskapp.osc-fr1.scalingo.io/auth)
 #### sample request 
     {
         "username": "noel",
@@ -34,67 +35,98 @@ pip3 install -r requirements.txt
 #### for log-in required modules, add header
     Authorization: "JWT {access_token}"
 ## /item
-#### [GET] /item/{item_name}
+#### [GET] /api/v1/item?name={name} 
 #### sample response 
     {
-    "item": {
-        "id": 1,
-        "name": "orange",
-        "price": 1.99
+        "item": {
+            "id": 4,
+            "name": "dog",
+            "price": 333.99,
+            "create_time": 1611647715
         }
     }
 
-#### [POST] /item/{item_name}  (login required)
+#### [POST] /api/v1/item  (login required)
 #### sample request 
     {
-        "name": "apple",
-        "price": 2.99
+        "name": "dog",
+        "price": 333.99
     }
 #### sample response 
     {
-    "item": {
-        "id": 1,
-        "name": "apple",
-        "price": 2.99
-        }
+        "id": 4,
+        "name": "dog",
+        "price": 333.99,
+        "create_time": 1611647715
     }
 
-#### [DELETE] /item/{item_name} (login required)
+#### [DELETE] api/v1/item?name={name} (login required)
 #### sample response
     {
         "items": [
             {
                 "id": 1,
-                "name": "orange",
-                "price": 1.99
+                "name": "apple",
+                "price": 3.99,
+                "create_time": 1611647703
             },
             {
                 "id": 3,
-                "name": "grape",
-                "price": 1.99
+                "name": "cat",
+                "price": 333.99,
+                "create_time": 1611647712
+            },
+            {
+                "id": 4,
+                "name": "dog",
+                "price": 333.99,
+                "create_time": 1611647715
             }
         ]
     }
 
-## /items
-#### [GET] /items
+## /item_id
+#### [GET] api/v1/item_id?id={id}
 #### sample response
+    {
+        "item": {
+            "id": 2,
+            "name": "orange",
+            "price": 3.99,
+            "create_time": 1611647707
+        }
+    }
+
+## /items
+#### [GET] api/v1/items
+#### optional param: ?sort={sort}
+0: create_time desc, 1: create_time asc, 2: name asc, 3: name desc
+#### sample response, ?sort=3
     {
         "items": [
             {
-                "id": 1,
-                "name": "grape",
-                "price": 1.99
+                "id": 2,
+                "name": "orange",
+                "price": 3.99,
+                "create_time": 1611647707
             },
             {
-                "id": 2,
-                "name": "pencil",
-                "price": 12.99
+                "id": 4,
+                "name": "dog",
+                "price": 333.99,
+                "create_time": 1611647715
             },
             {
                 "id": 3,
-                "name": "phone",
-                "price": 15.99
+                "name": "cat",
+                "price": 333.99,
+                "create_time": 1611647712
+            },
+            {
+                "id": 1,
+                "name": "apple",
+                "price": 3.99,
+                "create_time": 1611647703
             }
         ]
     }
