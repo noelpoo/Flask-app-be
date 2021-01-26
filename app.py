@@ -10,6 +10,7 @@ app = Flask(__name__)
 app.secret_key = "PALO"
 api = Api(app)
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = False
+app.config['PROPAGATE_EXCEPTIONS'] = True
 swagger = Swagger(app)
 
 jwt = JWT(app, authenticate, identity)
