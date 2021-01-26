@@ -1,8 +1,8 @@
 import os
+import time
 from flask import Flask, request
 from flask_restful import Resource, Api, reqparse
 from flask_jwt import JWT, jwt_required
-from flasgger import Swagger
 
 from security import authenticate, identity
 
@@ -14,7 +14,6 @@ app.secret_key = "PALO"
 api = Api(app)
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = False
 app.config['PROPAGATE_EXCEPTIONS'] = True
-swagger = Swagger(app)
 
 jwt = JWT(app, authenticate, identity)
 
@@ -42,7 +41,8 @@ class Item(Resource):
         item = {
             'id': len(items) + 1,
             'name': name,
-            'price': request_data['price']
+            'price': request_data['price'],
+            'create_time': round(time.time())
         }
         items.append(item)
         return item, 201
@@ -88,7 +88,30 @@ class ItemID(Resource):
 class ItemList(Resource):
 
     def get(self):
-        return {'items': items}
+        parser = reqparse.RequestParser()
+        parser.add_argument('sort', type=int, required=False)
+        _sort = int(parser.parse_args().get('sort'))
+        print(_sort)
+        if _sort or _sort == 0:
+            # sort by create time desc
+            if _sort == 0:
+                copy = sorted(items, key=lambda k: k['create_time'], reverse=True)
+                print(copy)
+                return {'items': copy}
+            # sort by create time asc
+            elif _sort == 1:
+                copy = sorted(items, key=lambda k: k['create_time'], reverse=False)
+                print(copy)
+                return {'items': copy}
+            # sort by name asc
+            elif _sort == 2:
+                copy = sorted(items, key=lambda k: k['name'], reverse=False)
+                return {'items': copy}
+            elif _sort == 3:
+                copy = sorted(items, key=lambda k: k['name'], reverse=True)
+                return {'items': copy}
+        else:
+            return {'items': items}
 
 
 api.add_resource(Item, '{}/item'.format(API_PATH))

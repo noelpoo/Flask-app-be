@@ -38,26 +38,26 @@ pip3 install -r requirements.txt
 #### [GET] /api/v1/item?name={name} 
 #### sample response 
     {
-    "item": {
-        "id": 1,
-        "name": "orange",
-        "price": 1.99
+        "item": {
+            "id": 4,
+            "name": "dog",
+            "price": 333.99,
+            "create_time": 1611647715
         }
     }
 
 #### [POST] /api/v1/item  (login required)
 #### sample request 
     {
-        "name": "apple",
-        "price": 2.99
+        "name": "dog",
+        "price": 333.99
     }
 #### sample response 
     {
-    "item": {
-        "id": 1,
-        "name": "apple",
-        "price": 2.99
-        }
+        "id": 4,
+        "name": "dog",
+        "price": 333.99,
+        "create_time": 1611647715
     }
 
 #### [DELETE] api/v1/item?name={name} (login required)
@@ -66,13 +66,21 @@ pip3 install -r requirements.txt
         "items": [
             {
                 "id": 1,
-                "name": "orange",
-                "price": 1.99
+                "name": "apple",
+                "price": 3.99,
+                "create_time": 1611647703
             },
             {
                 "id": 3,
-                "name": "grape",
-                "price": 1.99
+                "name": "cat",
+                "price": 333.99,
+                "create_time": 1611647712
+            },
+            {
+                "id": 4,
+                "name": "dog",
+                "price": 333.99,
+                "create_time": 1611647715
             }
         ]
     }
@@ -81,32 +89,44 @@ pip3 install -r requirements.txt
 #### [GET] api/v1/item_id?id={id}
 #### sample response
     {
-    "item": {
-        "id": 1,
-        "name": "orange",
-        "price": 1.99
+        "item": {
+            "id": 2,
+            "name": "orange",
+            "price": 3.99,
+            "create_time": 1611647707
         }
     }
 
 ## /items
 #### [GET] api/v1/items
-#### sample response
+#### optional param: ?sort={sort}
+0: create_time desc, 1: create_time asc, 2: name asc, 3: name desc
+#### sample response, ?sort=3
     {
         "items": [
             {
-                "id": 1,
-                "name": "grape",
-                "price": 1.99
+                "id": 2,
+                "name": "orange",
+                "price": 3.99,
+                "create_time": 1611647707
             },
             {
-                "id": 2,
-                "name": "pencil",
-                "price": 12.99
+                "id": 4,
+                "name": "dog",
+                "price": 333.99,
+                "create_time": 1611647715
             },
             {
                 "id": 3,
-                "name": "phone",
-                "price": 15.99
+                "name": "cat",
+                "price": 333.99,
+                "create_time": 1611647712
+            },
+            {
+                "id": 1,
+                "name": "apple",
+                "price": 3.99,
+                "create_time": 1611647703
             }
         ]
     }
