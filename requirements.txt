@@ -6,3 +6,4 @@ requests==2.25.1
 shortuuid==1.0.1
 PyJWT==1.4.2
 flasgger==0.9.5
+flask
