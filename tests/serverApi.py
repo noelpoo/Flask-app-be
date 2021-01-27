@@ -22,7 +22,7 @@ class ServerApi:
             resp_json= resp.json()
             token = resp_json.get('access_token', "")
             self.access_token = 'JWT {}'.format(token)
-            return resp
+            return self.access_token
 
     # login required
     def post_item(self, item_name, price):
