@@ -3,20 +3,19 @@ import time
 from flask import Flask, request
 from flask_restful import Resource, Api, reqparse
 from flask_jwt import JWT, jwt_required
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 
 from security import authenticate, identity
 
 API_VERSION = 'v1'
 API_PATH = '/api/{}'.format(API_VERSION)
-
 app = Flask(__name__)
-cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 app.secret_key = "PALO"
 api = Api(app)
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = False
 app.config['PROPAGATE_EXCEPTIONS'] = True
-
+app.config['CORS_HEADERS'] = 'Content-Type'
+cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 jwt = JWT(app, authenticate, identity)
 
 items = []
@@ -35,6 +34,7 @@ class Item(Resource):
             return {'message': "malformed body"}, 400
 
     @jwt_required()
+    @cross_origin(origin='*', headers=['Content-Type', 'Authorization'])
     def post(self):
         request_data = request.get_json(force=True)
         name = request_data['name']
@@ -50,6 +50,7 @@ class Item(Resource):
         return item, 201
 
     @jwt_required()
+    @cross_origin(origin='*', headers=['Content-Type', 'Authorization'])
     def delete(self):
         global items
         parser = reqparse.RequestParser()
