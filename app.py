@@ -15,7 +15,7 @@ api = Api(app)
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = False
 app.config['PROPAGATE_EXCEPTIONS'] = True
 app.config['CORS_HEADERS'] = 'Content-Type'
-cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
+cors = CORS(app, resources={r"/*": {"origins": "*"}})
 jwt = JWT(app, authenticate, identity)
 
 items = []
