@@ -7,3 +7,4 @@ shortuuid==1.0.1
 PyJWT==1.4.2
 flasgger==0.9.5
 Flask-Cors==3.0.10
+Flask-JWT-Extended==3.25.0
