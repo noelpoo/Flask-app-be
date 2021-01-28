@@ -22,7 +22,9 @@ pip3 install -r requirements.txt
 # API specifications (Live Server)
 ## Host = https://flaskapp.osc-fr1.scalingo.io
 ## Version = api/v1
-## /auth (login module) (https://flaskapp.osc-fr1.scalingo.io/auth)
+##
+##Login
+#### [POST] /api/v1/login (https://flaskapp.osc-fr1.scalingo.io/api/v1/login)
 #### sample request 
     {
         "username": "noel",
@@ -30,10 +32,12 @@ pip3 install -r requirements.txt
     }
 #### sample response
     {
-        "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MTE1NTQ4MDMsImlhdCI6MTYxMTU1NDUwMywibmJmIjoxNjExNTU0NTAzLCJpZGVudGl0eSI6Mn0.Z9pJB8wWdSJWXD5uO_MjDPuRZnozTG2jL7ZfjftcEuQ"
+        "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MTE4MDQ4ODYsIm5iZiI6MTYxMTgwNDg4NiwianRpIjoiOGJkZDk0MDItYmFlZi00YTQ0LThmNWYtYTBhNTBiMTJlMTJkIiwiaWRlbnRpdHkiOjIsImZyZXNoIjp0cnVlLCJ0eXBlIjoiYWNjZXNzIn0.w8GMwm0e-aqCuUI5YgKnAdN-MVtSzLhh9s4w9BIUj_Q",
+        "refresh_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MTE4MDQ4ODYsIm5iZiI6MTYxMTgwNDg4NiwianRpIjoiOTI4ZmFiZDAtMGJhMS00NDE1LTkyZjEtNGYyY2Q5OTQ1MWI1IiwiZXhwIjoxNjE0Mzk2ODg2LCJpZGVudGl0eSI6MiwidHlwZSI6InJlZnJlc2gifQ.kW9s7l-zCg18kgX4QH6ZixvohUEz4q5i5y3IjlIQ7U0"
     }
-#### for log-in required modules, add header
-    Authorization: "JWT {access_token}"
+#### for log-in required end-points, add header
+    Authorization: "Bearer {access_token}"
+##
 ## /item
 #### [GET] /api/v1/item?name={name} 
 #### sample response 
@@ -84,7 +88,7 @@ pip3 install -r requirements.txt
             }
         ]
     }
-
+##
 ## /item_id
 #### [GET] api/v1/item_id?id={id}
 #### sample response
@@ -97,9 +101,10 @@ pip3 install -r requirements.txt
         }
     }
 
+##
 ## /items
 #### [GET] api/v1/items
-#### optional param: ?sort={sort}
+#### required param: ?sort={sort}
 0: create_time desc, 1: create_time asc, 2: name asc, 3: name desc
 #### sample response, ?sort=3
     {

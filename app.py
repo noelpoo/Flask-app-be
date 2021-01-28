@@ -2,22 +2,23 @@ import os
 import time
 from flask import Flask, request
 from flask_restful import Resource, Api, reqparse
-from flask_jwt import JWT, jwt_required
-from flask_cors import CORS
+# from flask_jwt import JWT, jwt_required
+from flask_cors import CORS, cross_origin
+from flask_jwt_extended import JWTManager, create_access_token, create_refresh_token, jwt_required
 
-from security import authenticate, identity
+from security import *
 
 API_VERSION = 'v1'
 API_PATH = '/api/{}'.format(API_VERSION)
-
 app = Flask(__name__)
-cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 app.secret_key = "PALO"
 api = Api(app)
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = False
 app.config['PROPAGATE_EXCEPTIONS'] = True
+app.config['CORS_HEADERS'] = 'Content-Type'
+cors = CORS(app, resources={r"/*": {"origins": "*"}})
+jwt = JWTManager(app)
 
-jwt = JWT(app, authenticate, identity)
 
 items = []
 
@@ -34,7 +35,8 @@ class Item(Resource):
         else:
             return {'message': "malformed body"}, 400
 
-    @jwt_required()
+    @jwt_required
+    @cross_origin(origin='*', headers=['Content-Type', 'Authorization'])
     def post(self):
         request_data = request.get_json(force=True)
         name = request_data['name']
@@ -49,7 +51,8 @@ class Item(Resource):
         items.append(item)
         return item, 201
 
-    @jwt_required()
+    @jwt_required
+    @cross_origin(origin='*', headers=['Content-Type', 'Authorization'])
     def delete(self):
         global items
         parser = reqparse.RequestParser()
@@ -116,9 +119,28 @@ class ItemList(Resource):
             return {'items': items}
 
 
+class UserLogin(Resource):
+
+    def post(self):
+        data = request.get_json(force=True)
+        print(data)
+        user = username_table.get(data['username'], None)
+        if user and safe_str_cmp(user.password, data['password']):
+            access_token = create_access_token(identity=user.id, fresh=True)
+            refresh_token = create_refresh_token(user.id)
+            return {
+                'access_token': access_token,
+                'refresh_token': refresh_token
+            }, 200
+        return {
+            'message': 'invalid credentials'
+        }, 401
+
+
 api.add_resource(Item, '{}/item'.format(API_PATH))
 api.add_resource(ItemList, '{}/items'.format(API_PATH))
 api.add_resource(ItemID, '{}/item_id'.format(API_PATH))
+api.add_resource(UserLogin, '{}/login'.format(API_PATH))
 
 
 if __name__ == "__main__":
