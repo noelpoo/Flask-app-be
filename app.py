@@ -120,16 +120,10 @@ class ItemList(Resource):
 
 
 class UserLogin(Resource):
-    parser = reqparse.RequestParser()
-    parser.add_argument('username',
-                        type=str,
-                        required=True)
-    parser.add_argument('password',
-                        type=str,
-                        required=True)
 
     def post(self):
-        data = self.parser.parse_args()
+        data = request.get_json(force=True)
+        print(data)
         user = username_table.get(data['username'], None)
         if user and safe_str_cmp(user.password, data['password']):
             access_token = create_access_token(identity=user.id, fresh=True)
