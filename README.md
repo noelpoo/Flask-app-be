@@ -40,6 +40,9 @@ pip3 install -r requirements.txt
 ##
 ## /item
 #### [GET] /api/v1/item?name={name} 
+#### Query params: 
+    ?name={name}
+    ?id={id}
 #### sample response 
     {
         "item": {
@@ -64,7 +67,10 @@ pip3 install -r requirements.txt
         "create_time": 1611647715
     }
 
-#### [DELETE] api/v1/item?name={name} (login required)
+#### [DELETE] api/v1/item?name={name}(login required)
+#### Query params:
+    ?name={name}
+    ?id={id}
 #### sample response
     {
         "items": [
@@ -88,50 +94,45 @@ pip3 install -r requirements.txt
             }
         ]
     }
-##
-## /item_id
-#### [GET] api/v1/item_id?id={id}
-#### sample response
-    {
-        "item": {
-            "id": 2,
-            "name": "orange",
-            "price": 3.99,
-            "create_time": 1611647707
-        }
-    }
 
 ##
 ## /items
 #### [GET] api/v1/items
 #### required param: ?sort={sort}
-0: create_time desc, 1: create_time asc, 2: name asc, 3: name desc
+0: create_time desc, 1: create_time asc, 2: price desc, 3: price asc
 #### sample response, ?sort=3
     {
+        "count": 5,
         "items": [
             {
-                "id": 2,
-                "name": "orange",
-                "price": 3.99,
-                "create_time": 1611647707
-            },
-            {
-                "id": 4,
-                "name": "dog",
-                "price": 333.99,
-                "create_time": 1611647715
-            },
-            {
+                "create_time": 1619506998,
                 "id": 3,
-                "name": "cat",
-                "price": 333.99,
-                "create_time": 1611647712
+                "name": "pencil",
+                "price": 0.2
             },
             {
+                "create_time": 1619506959,
                 "id": 1,
+                "name": "orange",
+                "price": 0.5
+            },
+            {
+                "create_time": 1619508095,
+                "id": 5,
                 "name": "apple",
-                "price": 3.99,
-                "create_time": 1611647703
+                "price": 0.99
+            },
+            {
+                "create_time": 1619507580,
+                "id": 4,
+                "name": "grape",
+                "price": 1.99
+            },
+            {
+                "create_time": 1619508104,
+                "id": 6,
+                "name": "pen",
+                "price": 2.99
             }
         ]
     }
