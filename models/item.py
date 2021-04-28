@@ -28,7 +28,7 @@ class Item:
         doc_ref = db.collection(ITEM_FB_DB).stream()
         docs = [doc.to_dict() for doc in doc_ref]
         if docs:
-            return[
+            return [
                 cls(item['id'], item['name'],
                     item['price'], item['create_time'])
                 for item in docs
@@ -41,11 +41,11 @@ class Item:
         doc_ref = db.collection(ITEM_FB_DB).stream()
         docs = [doc.to_dict() for doc in doc_ref]
         if docs:
-            copy = sorted(docs, key=lambda k: k[SORT_MAP.get(sort_val)['key']],
-                          reverse=SORT_MAP.get(sort_val)['desc'])
             return [
-                cls(i['id'], i['name'], i['price'], i['create_time'])
-                for i in copy
+                cls(i['id'], i['name'],
+                    i['price'], i['create_time'])
+                for i in sorted(docs, key=lambda k: k[SORT_MAP.get(sort_val)['key']],
+                                reverse=SORT_MAP.get(sort_val)['desc'])
             ]
         else:
             return None
@@ -126,38 +126,38 @@ class ItemResource(Resource):
             result = Item.find_by_id(_id)
             if result:
                 return {
-                    'item': {
-                        'id': result.id,
-                        'name': result.name,
-                        'price': result.price,
-                        'create_time': result.create_time
-                    }
-                }, 200
+                           'item': {
+                               'id': result.id,
+                               'name': result.name,
+                               'price': result.price,
+                               'create_time': result.create_time
+                           }
+                       }, 200
             else:
-                return{
-                    'message': 'item with id {} is not found'.format(_id)
-                }, 404
+                return {
+                           'message': 'item with id {} is not found'.format(_id)
+                       }, 404
 
         elif name:
             result = Item.find_by_name(name)
             if result:
                 return {
-                    'item': {
-                        'id': result.id,
-                        'name': result.name,
-                        'price': result.price,
-                        'create_time': result.create_time
-                    }
-                }, 200
+                           'item': {
+                               'id': result.id,
+                               'name': result.name,
+                               'price': result.price,
+                               'create_time': result.create_time
+                           }
+                       }, 200
             else:
                 return {
-                    'message': 'item with name {} is not found'.format(name)
-                }, 404
+                           'message': 'item with name {} is not found'.format(name)
+                       }, 404
 
         else:
             return {
-                'message': 'Expected 1 query parameter'
-            }, 403
+                       'message': 'Expected 1 query parameter'
+                   }, 403
 
     @jwt_required
     @cross_origin(origin='*', headers=['Content-Type', 'Authorization'])
@@ -171,20 +171,20 @@ class ItemResource(Resource):
                 result = Item.add_item_to_db(item)
                 if result:
                     return {
-                        'item': result
-                    }, 201
+                               'item': result
+                           }, 201
                 else:
                     return {
-                        'message': "something went wrong"
-                    }, 400
+                               'message': "something went wrong"
+                           }, 400
             except ValueError:
                 return {
-                    'message': "request body is malformed"
-                }, 400
+                           'message': "request body is malformed"
+                       }, 400
         else:
-            return{
-                'message': 'item with name: {} already exists'.format(data['name'])
-            }, 403
+            return {
+                       'message': 'item with name: {} already exists'.format(data['name'])
+                   }, 403
 
     @jwt_required
     @cross_origin(origin='*', headers=['Content-Type', 'Authorization'])
@@ -198,33 +198,33 @@ class ItemResource(Resource):
 
         if _id and name:
             return {
-                'message': '1 query parameter expected'
-            }, 400
+                       'message': '1 query parameter expected'
+                   }, 400
         elif _id:
             if Item.find_by_id(_id):
                 Item.delete_item_using_id(_id)
                 return {
-                    'message': 'Deleted item with id {}'.format(_id)
-                }, 200
+                           'message': 'Deleted item with id {}'.format(_id)
+                       }, 200
             else:
                 return {
-                    'message': 'unable to delete item with id {}, item not found'.format(_id)
-                }, 403
+                           'message': 'unable to delete item with id {}, item not found'.format(_id)
+                       }, 403
         elif name:
             _id = Item.find_by_name(name).id if Item.find_by_name(name) is not None else None
             if _id:
                 Item.delete_item_using_id(_id)
-                return{
-                    'message': 'Deleted item with name {}'.format(name)
-                }, 200
+                return {
+                           'message': 'Deleted item with name {}'.format(name)
+                       }, 200
             else:
                 return {
-                    'message': 'unable to delete item with name {}, item not found'.format(name)
-                }, 403
+                           'message': 'unable to delete item with name {}, item not found'.format(name)
+                       }, 403
         else:
             return {
-                'message': 'missing query parameters'
-            }, 400
+                       'message': 'missing query parameters'
+                   }, 400
 
 
 class AllItemsResource(Resource):
@@ -239,21 +239,21 @@ class AllItemsResource(Resource):
             results = Item.find_all_items_sorted(sort)
             if results:
                 return {
-                    'count': len(results),
-                    'items': [
-                        {
-                            'id': result.id,
-                            'name': result.name,
-                            'price': result.price,
-                            'create_time': result.create_time
-                        } for result in results
-                    ]
-                }, 200
+                           'count': len(results),
+                           'items': [
+                               {
+                                   'id': result.id,
+                                   'name': result.name,
+                                   'price': result.price,
+                                   'create_time': result.create_time
+                               } for result in results
+                           ]
+                       }, 200
             else:
                 return {
-                    'message': 'no items found in database'
-                }, 404
+                           'message': 'no items found in database'
+                       }, 404
         else:
             return {
-                'message': 'sort value out of range'
-            }, 403
+                       'message': 'sort value out of range'
+                   }, 403
